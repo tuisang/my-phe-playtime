@@ -25,6 +25,7 @@ export type Database = {
           price: number
           published: boolean
           title: string
+          topic_id: string | null
           updated_at: string
           video_url: string | null
         }
@@ -38,6 +39,7 @@ export type Database = {
           price?: number
           published?: boolean
           title: string
+          topic_id?: string | null
           updated_at?: string
           video_url?: string | null
         }
@@ -51,10 +53,19 @@ export type Database = {
           price?: number
           published?: boolean
           title?: string
+          topic_id?: string | null
           updated_at?: string
           video_url?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "lessons_topic_id_fkey"
+            columns: ["topic_id"]
+            isOneToOne: false
+            referencedRelation: "topics"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       payments: {
         Row: {
@@ -121,6 +132,36 @@ export type Database = {
           created_at?: string
           full_name?: string | null
           id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      topics: {
+        Row: {
+          created_at: string
+          description: string
+          grade: number
+          id: string
+          published: boolean
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description: string
+          grade: number
+          id?: string
+          published?: boolean
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          grade?: number
+          id?: string
+          published?: boolean
+          title?: string
           updated_at?: string
         }
         Relationships: []
