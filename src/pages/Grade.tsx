@@ -2,18 +2,24 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Navbar } from "@/components/Navbar";
-import { LessonCard } from "@/components/LessonCard";
 import { Button } from "@/components/ui/button";
-import { ChevronLeft } from "lucide-react";
+import { Card } from "@/components/ui/card";
+import { ChevronLeft, FileText, Film, PlayCircle, BookOpen } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Link } from "react-router-dom";
 import { getCategoryForGrade, getGradeLabel } from "@/lib/grades";
 
-interface Lesson {
+interface Topic {
   id: string;
   title: string;
   description: string;
-  price: number;
-  video_url: string | null;
+}
+
+interface ResourceCount {
+  pdf_notes: number;
+  whiteboard_animation: number;
+  video: number;
+  readable_notes: number;
 }
 
 const Grade = () => {
@@ -21,9 +27,12 @@ const Grade = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState<any>(null);
   const [userRole, setUserRole] = useState<string>("");
-  const [lessons, setLessons] = useState<Lesson[]>([]);
-  const [purchasedLessons, setPurchasedLessons] = useState<Set<string>>(new Set());
+  const [topics, setTopics] = useState<Topic[]>([]);
+  const [counts, setCounts] = useState<Record<string, ResourceCount>>({});
   const [isLoading, setIsLoading] = useState(true);
+
+  const gradeNum = parseInt(grade || "1", 10);
+  const category = getCategoryForGrade(gradeNum);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -35,101 +44,102 @@ const Grade = () => {
           .from("user_roles")
           .select("role")
           .eq("user_id", session.user.id)
-          .single();
-        
-        if (roleData) {
-          setUserRole(roleData.role);
-        }
-
-        // Fetch purchased lessons
-        const { data: payments } = await supabase
-          .from("payments")
-          .select("lesson_id")
-          .eq("user_id", session.user.id)
-          .eq("status", "completed");
-
-        if (payments) {
-          setPurchasedLessons(new Set(payments.map(p => p.lesson_id)));
-        }
+          .maybeSingle();
+        if (roleData) setUserRole(roleData.role);
       }
 
-      // Fetch lessons for this grade
-      const { data: lessonsData } = await supabase
-        .from("lessons")
-        .select("*")
-        .eq("grade", parseInt(grade || "1", 10))
+      const { data: topicsData } = await supabase
+        .from("topics")
+        .select("id, title, description")
+        .eq("grade", gradeNum)
         .eq("published", true)
-        .order("created_at", { ascending: false });
+        .order("created_at", { ascending: true });
 
-      if (lessonsData) {
-        setLessons(lessonsData);
+      if (topicsData) {
+        setTopics(topicsData);
+        const ids = topicsData.map((t) => t.id);
+        if (ids.length) {
+          const { data: resData } = await supabase
+            .from("topic_resources")
+            .select("topic_id, type")
+            .in("topic_id", ids);
+          const map: Record<string, ResourceCount> = {};
+          topicsData.forEach((t) => {
+            map[t.id] = { pdf_notes: 0, whiteboard_animation: 0, video: 0, readable_notes: 0 };
+          });
+          resData?.forEach((r: any) => {
+            if (map[r.topic_id]) map[r.topic_id][r.type as keyof ResourceCount]++;
+          });
+          setCounts(map);
+        }
       }
-
       setIsLoading(false);
     };
 
     fetchData();
-
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_e, session) => {
       setUser(session?.user || null);
     });
-
     return () => subscription.unsubscribe();
-  }, [grade]);
-
-  const gradeNum = parseInt(grade || "1", 10);
-  const category = getCategoryForGrade(gradeNum);
+  }, [gradeNum]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-muted to-background">
       <Navbar user={user} userRole={userRole} />
 
       <main className="container mx-auto px-4 py-12">
-        <Button
-          onClick={() => navigate("/")}
-          variant="outline"
-          size="lg"
-          className="mb-6 font-bold"
-        >
+        <Button onClick={() => navigate("/")} variant="outline" size="lg" className="mb-6 font-bold">
           <ChevronLeft className="w-4 h-4 mr-2" />
           Back to Classes
         </Button>
 
         <div className={`bg-gradient-to-r ${category.gradient} rounded-3xl p-8 mb-8 text-white shadow-2xl`}>
-          <p className="text-sm font-bold uppercase tracking-wider opacity-90 mb-1">
-            {category.name}
-          </p>
+          <p className="text-sm font-bold uppercase tracking-wider opacity-90 mb-1">{category.name}</p>
           <h1 className="text-5xl font-bold mb-2">{getGradeLabel(gradeNum)}</h1>
           <p className="text-xl">
-            {lessons.length} exciting PHE lesson{lessons.length !== 1 ? 's' : ''} waiting for you!
+            {topics.length} PHE topic{topics.length !== 1 ? "s" : ""} ready to explore
           </p>
         </div>
 
         {isLoading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[1, 2, 3].map((i) => (
+            {[1, 2, 3, 4, 5, 6].map((i) => (
               <Skeleton key={i} className="h-64 rounded-2xl" />
             ))}
           </div>
-        ) : lessons.length === 0 ? (
-          <div className="text-center py-16">
-            <p className="text-2xl text-muted-foreground">
-              No lessons available yet. Check back soon!
-            </p>
-          </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {lessons.map((lesson) => (
-              <LessonCard
-                key={lesson.id}
-                id={lesson.id}
-                title={lesson.title}
-                description={lesson.description}
-                price={lesson.price}
-                hasVideo={!!lesson.video_url}
-                isPurchased={purchasedLessons.has(lesson.id)}
-              />
-            ))}
+            {topics.map((t) => {
+              const c = counts[t.id] || { pdf_notes: 0, whiteboard_animation: 0, video: 0, readable_notes: 0 };
+              return (
+                <Link key={t.id} to={`/topic/${t.id}`}>
+                  <Card className={`group h-full cursor-pointer overflow-hidden border-4 border-transparent hover:${category.borderColor} transition-all duration-300 hover:scale-[1.02] hover:shadow-xl`}>
+                    <div className={`bg-gradient-to-br ${category.gradient} p-6 text-white`}>
+                      <h3 className="text-2xl font-bold mb-2">{t.title}</h3>
+                      <p className="text-sm opacity-90 line-clamp-2">{t.description}</p>
+                    </div>
+                    <div className="p-5 bg-card grid grid-cols-2 gap-3 text-sm font-semibold">
+                      <div className="flex items-center gap-2 text-foreground">
+                        <FileText className="w-4 h-4 text-primary" />
+                        {c.pdf_notes} PDF notes
+                      </div>
+                      <div className="flex items-center gap-2 text-foreground">
+                        <Film className="w-4 h-4 text-secondary" />
+                        {c.whiteboard_animation} animations
+                      </div>
+                      <div className="flex items-center gap-2 text-foreground">
+                        <PlayCircle className="w-4 h-4 text-accent" />
+                        {c.video} videos
+                      </div>
+                      <div className="flex items-center gap-2 text-foreground">
+                        <BookOpen className="w-4 h-4 text-primary" />
+                        {c.readable_notes} readers
+                      </div>
+                    </div>
+                  </Card>
+                </Link>
+              );
+            })}
           </div>
         )}
       </main>
