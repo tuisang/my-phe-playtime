@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ChevronLeft, Download, FileText, Image as ImageIcon, PlayCircle, Lock } from "lucide-react";
+import { getGradeLabel } from "@/lib/grades";
 import { useToast } from "@/hooks/use-toast";
 
 interface LessonData {
@@ -126,11 +127,11 @@ const Lesson = () => {
           className="mb-6 font-bold"
         >
           <ChevronLeft className="w-4 h-4 mr-2" />
-          Back to Grade {lesson.grade}
+          Back to {getGradeLabel(lesson.grade)}
         </Button>
 
         <div className="mb-8">
-          <Badge className="mb-4 text-lg px-4 py-2">Grade {lesson.grade}</Badge>
+          <Badge className="mb-4 text-lg px-4 py-2">{getGradeLabel(lesson.grade)}</Badge>
           <h1 className="text-5xl font-bold mb-4 text-foreground">{lesson.title}</h1>
           <p className="text-xl text-muted-foreground">{lesson.description}</p>
         </div>
