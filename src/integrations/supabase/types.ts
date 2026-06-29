@@ -136,6 +136,53 @@ export type Database = {
         }
         Relationships: []
       }
+      topic_resources: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          sort_order: number
+          thumbnail_url: string | null
+          title: string
+          topic_id: string
+          type: Database["public"]["Enums"]["resource_type"]
+          updated_at: string
+          url: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          sort_order?: number
+          thumbnail_url?: string | null
+          title: string
+          topic_id: string
+          type: Database["public"]["Enums"]["resource_type"]
+          updated_at?: string
+          url: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          sort_order?: number
+          thumbnail_url?: string | null
+          title?: string
+          topic_id?: string
+          type?: Database["public"]["Enums"]["resource_type"]
+          updated_at?: string
+          url?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "topic_resources_topic_id_fkey"
+            columns: ["topic_id"]
+            isOneToOne: false
+            referencedRelation: "topics"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       topics: {
         Row: {
           created_at: string
@@ -210,6 +257,11 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "teacher" | "parent" | "pupil"
+      resource_type:
+        | "pdf_notes"
+        | "whiteboard_animation"
+        | "video"
+        | "readable_notes"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -338,6 +390,12 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "teacher", "parent", "pupil"],
+      resource_type: [
+        "pdf_notes",
+        "whiteboard_animation",
+        "video",
+        "readable_notes",
+      ],
     },
   },
 } as const
