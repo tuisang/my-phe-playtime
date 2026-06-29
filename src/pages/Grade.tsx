@@ -6,6 +6,7 @@ import { LessonCard } from "@/components/LessonCard";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { getCategoryForGrade, getGradeLabel } from "@/lib/grades";
 
 interface Lesson {
   id: string;
@@ -56,7 +57,7 @@ const Grade = () => {
       const { data: lessonsData } = await supabase
         .from("lessons")
         .select("*")
-        .eq("grade", parseInt(grade || "1"))
+        .eq("grade", parseInt(grade || "1", 10))
         .eq("published", true)
         .order("created_at", { ascending: false });
 
@@ -76,16 +77,13 @@ const Grade = () => {
     return () => subscription.unsubscribe();
   }, [grade]);
 
-  const getGradeColor = (gradeNum: number) => {
-    if (gradeNum <= 3) return "from-yellow-400 to-orange-400";
-    if (gradeNum <= 6) return "from-cyan-400 to-teal-400";
-    return "from-purple-400 to-indigo-400";
-  };
+  const gradeNum = parseInt(grade || "1", 10);
+  const category = getCategoryForGrade(gradeNum);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-muted to-background">
       <Navbar user={user} userRole={userRole} />
-      
+
       <main className="container mx-auto px-4 py-12">
         <Button
           onClick={() => navigate("/")}
@@ -94,11 +92,14 @@ const Grade = () => {
           className="mb-6 font-bold"
         >
           <ChevronLeft className="w-4 h-4 mr-2" />
-          Back to Grades
+          Back to Classes
         </Button>
 
-        <div className={`bg-gradient-to-r ${getGradeColor(parseInt(grade || "1"))} rounded-3xl p-8 mb-8 text-white shadow-2xl`}>
-          <h1 className="text-5xl font-bold mb-2">Grade {grade}</h1>
+        <div className={`bg-gradient-to-r ${category.gradient} rounded-3xl p-8 mb-8 text-white shadow-2xl`}>
+          <p className="text-sm font-bold uppercase tracking-wider opacity-90 mb-1">
+            {category.name}
+          </p>
+          <h1 className="text-5xl font-bold mb-2">{getGradeLabel(gradeNum)}</h1>
           <p className="text-xl">
             {lessons.length} exciting PHE lesson{lessons.length !== 1 ? 's' : ''} waiting for you!
           </p>
