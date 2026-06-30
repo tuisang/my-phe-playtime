@@ -8,6 +8,7 @@ import Auth from "./pages/Auth";
 import Grade from "./pages/Grade";
 import Lesson from "./pages/Lesson";
 import Topic from "./pages/Topic";
+import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -24,6 +25,7 @@ const App = () => (
           <Route path="/grade/:grade" element={<Grade />} />
           <Route path="/topic/:id" element={<Topic />} />
           <Route path="/lesson/:id" element={<Lesson />} />
+          <Route path="/admin" element={<Admin />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
