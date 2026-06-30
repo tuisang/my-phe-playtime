@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { ChevronLeft, Download, FileText, Image as ImageIcon, PlayCircle, Lock } from "lucide-react";
 import { getGradeLabel } from "@/lib/grades";
 import { useToast } from "@/hooks/use-toast";
+import { openSecureDownload } from "@/lib/secureDownload";
 
 interface LessonData {
   id: string;
@@ -162,7 +163,11 @@ const Lesson = () => {
                   </div>
                 </div>
                 {isPurchased ? (
-                  <Button size="lg" className="font-bold">
+                  <Button
+                    size="lg"
+                    className="font-bold"
+                    onClick={() => openSecureDownload({ url: lesson.notes_pdf_url!, lessonId: lesson.id })}
+                  >
                     <Download className="w-4 h-4 mr-2" />
                     Download
                   </Button>
@@ -182,7 +187,12 @@ const Lesson = () => {
                   </div>
                 </div>
                 {isPurchased ? (
-                  <Button size="lg" variant="secondary" className="font-bold">
+                  <Button
+                    size="lg"
+                    variant="secondary"
+                    className="font-bold"
+                    onClick={() => openSecureDownload({ url: lesson.illustration_pdf_url!, lessonId: lesson.id })}
+                  >
                     <Download className="w-4 h-4 mr-2" />
                     Download
                   </Button>
