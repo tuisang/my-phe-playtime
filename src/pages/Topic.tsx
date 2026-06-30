@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { ChevronLeft, FileText, Film, PlayCircle, BookOpen, Download, ExternalLink } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { getCategoryForGrade, getGradeLabel } from "@/lib/grades";
+import { openSecureDownload } from "@/lib/secureDownload";
 
 interface Topic {
   id: string;
@@ -167,11 +168,13 @@ const Topic = () => {
                             )}
                           </div>
                         </div>
-                        <Button asChild className="mt-4 w-full font-bold" size="lg">
-                          <a href={r.url} target="_blank" rel="noopener noreferrer">
-                            <CtaIcon className="w-4 h-4 mr-2" />
-                            {section.cta}
-                          </a>
+                        <Button
+                          className="mt-4 w-full font-bold"
+                          size="lg"
+                          onClick={() => openSecureDownload({ resourceId: r.id })}
+                        >
+                          <CtaIcon className="w-4 h-4 mr-2" />
+                          {section.cta}
                         </Button>
                       </Card>
                     ))}
