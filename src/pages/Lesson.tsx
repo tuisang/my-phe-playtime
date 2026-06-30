@@ -187,7 +187,12 @@ const Lesson = () => {
                   </div>
                 </div>
                 {isPurchased ? (
-                  <Button size="lg" variant="secondary" className="font-bold">
+                  <Button
+                    size="lg"
+                    variant="secondary"
+                    className="font-bold"
+                    onClick={() => openSecureDownload({ url: lesson.illustration_pdf_url!, lessonId: lesson.id })}
+                  >
                     <Download className="w-4 h-4 mr-2" />
                     Download
                   </Button>
