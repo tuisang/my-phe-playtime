@@ -3,6 +3,7 @@ import { GraduationCap, LogOut, User } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { SearchBar } from "@/components/SearchBar";
 
 interface NavbarProps {
   user?: any;
@@ -42,6 +43,10 @@ export const Navbar = ({ user, userRole }: NavbarProps) => {
             </div>
           </Link>
 
+          <div className="hidden md:block flex-1 max-w-md mx-6">
+            <SearchBar />
+          </div>
+
           <div className="flex items-center gap-4">
             {user ? (
               <>
@@ -71,6 +76,9 @@ export const Navbar = ({ user, userRole }: NavbarProps) => {
               </Link>
             )}
           </div>
+        </div>
+        <div className="md:hidden mt-3">
+          <SearchBar />
         </div>
       </div>
     </nav>

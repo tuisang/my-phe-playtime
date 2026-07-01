@@ -9,6 +9,7 @@ import Grade from "./pages/Grade";
 import Lesson from "./pages/Lesson";
 import Topic from "./pages/Topic";
 import Admin from "./pages/Admin";
+import Search from "./pages/Search";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -26,6 +27,7 @@ const App = () => (
           <Route path="/topic/:id" element={<Topic />} />
           <Route path="/lesson/:id" element={<Lesson />} />
           <Route path="/admin" element={<Admin />} />
+          <Route path="/search" element={<Search />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
