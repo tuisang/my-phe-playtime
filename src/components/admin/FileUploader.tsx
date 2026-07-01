@@ -29,7 +29,7 @@ export const FileUploader = ({ accept, folder, bucket, currentUrl, onUploaded }:
     setUploading(true);
     const ext = file.name.split(".").pop() || "bin";
     const path = `${folder}/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
-    const { error } = await supabase.storage.from(BUCKET).upload(path, file, {
+    const { error } = await supabase.storage.from(resolvedBucket).upload(path, file, {
       cacheControl: "3600",
       upsert: false,
       contentType: file.type || undefined,
@@ -40,7 +40,7 @@ export const FileUploader = ({ accept, folder, bucket, currentUrl, onUploaded }:
       return;
     }
     // Store path as URL (resolved via signed URL on download). For now we store public-style path.
-    const { data } = supabase.storage.from(BUCKET).getPublicUrl(path);
+    const { data } = supabase.storage.from(resolvedBucket).getPublicUrl(path);
     onUploaded(data.publicUrl);
     setUploading(false);
     toast({ title: "File uploaded" });
