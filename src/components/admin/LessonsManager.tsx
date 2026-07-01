@@ -200,18 +200,18 @@ export const LessonsManager = () => {
               <Input placeholder="https://..." value={form.video_url ?? ""}
                 onChange={e => setForm({ ...form, video_url: e.target.value || null })} />
               <div className="mt-2">
-                <FileUploader accept="video/*" folder="videos"
+                <FileUploader accept="video/*" folder="lesson-videos" bucket="videos"
                   onUploaded={(url) => setForm(f => ({ ...f, video_url: url }))} />
               </div>
             </div>
             <div>
               <Label>Notes PDF</Label>
-              <FileUploader accept="application/pdf" folder="notes" currentUrl={form.notes_pdf_url}
+              <FileUploader accept="application/pdf" folder="lesson-notes" bucket="pdfs" currentUrl={form.notes_pdf_url}
                 onUploaded={(url) => setForm(f => ({ ...f, notes_pdf_url: url }))} />
             </div>
             <div>
               <Label>Coloured Illustration PDF</Label>
-              <FileUploader accept="application/pdf" folder="illustrations" currentUrl={form.illustration_pdf_url}
+              <FileUploader accept="application/pdf,image/*" folder="lesson-illustrations" bucket="illustrations" currentUrl={form.illustration_pdf_url}
                 onUploaded={(url) => setForm(f => ({ ...f, illustration_pdf_url: url }))} />
             </div>
             <div className="flex items-center gap-3">
