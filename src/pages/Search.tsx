@@ -84,7 +84,7 @@ const SearchPage = () => {
                       <Card className="p-4 hover:border-primary/60 transition-colors border-2">
                         <div className="flex items-start justify-between gap-2 mb-1">
                           <h3 className="font-bold">{t.title}</h3>
-                          <Badge variant="secondary" className={getCategoryForGrade(t.grade)}>
+                          <Badge variant="secondary" className={getCategoryForGrade(t.grade).borderColor}>
                             {getGradeLabel(t.grade)}
                           </Badge>
                         </div>
@@ -110,7 +110,7 @@ const SearchPage = () => {
                       <Card className="p-4 hover:border-primary/60 transition-colors border-2">
                         <div className="flex items-start justify-between gap-2 mb-1">
                           <h3 className="font-bold">{l.title}</h3>
-                          <Badge variant="secondary" className={getCategoryForGrade(l.grade)}>
+                          <Badge variant="secondary" className={getCategoryForGrade(l.grade).borderColor}>
                             {getGradeLabel(l.grade)}
                           </Badge>
                         </div>
