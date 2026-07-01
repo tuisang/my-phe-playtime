@@ -9,6 +9,7 @@ import Grade from "./pages/Grade";
 import Lesson from "./pages/Lesson";
 import Topic from "./pages/Topic";
 import Admin from "./pages/Admin";
+import Search from "./pages/Search";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
