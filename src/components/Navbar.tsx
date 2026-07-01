@@ -3,6 +3,7 @@ import { GraduationCap, LogOut, User } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { SearchBar } from "@/components/SearchBar";
 
 interface NavbarProps {
   user?: any;
