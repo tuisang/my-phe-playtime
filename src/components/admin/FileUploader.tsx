@@ -7,12 +7,13 @@ import { Upload, CheckCircle2, ExternalLink } from "lucide-react";
 interface FileUploaderProps {
   accept: string;
   folder: string;
+  bucket?: "pdfs" | "illustrations" | "videos";
   currentUrl?: string | null;
   onUploaded: (url: string) => void;
 }
 
-const BUCKET = "lesson-media";
-const MAX_BYTES = 50 * 1024 * 1024; // 50 MB
+const DEFAULT_BUCKET = "pdfs";
+const MAX_BYTES = 200 * 1024 * 1024; // 200 MB (videos can be big)
 
 export const FileUploader = ({ accept, folder, currentUrl, onUploaded }: FileUploaderProps) => {
   const { toast } = useToast();
