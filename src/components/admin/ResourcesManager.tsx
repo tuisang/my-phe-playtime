@@ -39,6 +39,13 @@ const ACCEPT_BY_TYPE: Record<ResourceType, string> = {
   readable_notes: "application/pdf,image/*",
 };
 
+const BUCKET_BY_TYPE: Record<ResourceType, "pdfs" | "illustrations" | "videos"> = {
+  pdf_notes: "pdfs",
+  whiteboard_animation: "videos",
+  video: "videos",
+  readable_notes: "illustrations",
+};
+
 const empty: Resource = {
   id: "", topic_id: "", type: "pdf_notes", title: "", description: "", url: "", sort_order: 0,
 };
