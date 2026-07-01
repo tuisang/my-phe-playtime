@@ -39,6 +39,13 @@ const ACCEPT_BY_TYPE: Record<ResourceType, string> = {
   readable_notes: "application/pdf,image/*",
 };
 
+const BUCKET_BY_TYPE: Record<ResourceType, "pdfs" | "illustrations" | "videos"> = {
+  pdf_notes: "pdfs",
+  whiteboard_animation: "videos",
+  video: "videos",
+  readable_notes: "illustrations",
+};
+
 const empty: Resource = {
   id: "", topic_id: "", type: "pdf_notes", title: "", description: "", url: "", sort_order: 0,
 };
@@ -207,6 +214,7 @@ export const ResourcesManager = () => {
                 onChange={e => setForm({ ...form, url: e.target.value })} />
               <div className="mt-2">
                 <FileUploader accept={ACCEPT_BY_TYPE[form.type]} folder={`resources/${form.type}`}
+                  bucket={BUCKET_BY_TYPE[form.type]}
                   currentUrl={form.url} onUploaded={(url) => setForm(f => ({ ...f, url }))} />
               </div>
             </div>

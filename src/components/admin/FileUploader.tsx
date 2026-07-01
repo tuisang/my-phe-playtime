@@ -7,14 +7,16 @@ import { Upload, CheckCircle2, ExternalLink } from "lucide-react";
 interface FileUploaderProps {
   accept: string;
   folder: string;
+  bucket?: "pdfs" | "illustrations" | "videos";
   currentUrl?: string | null;
   onUploaded: (url: string) => void;
 }
 
-const BUCKET = "lesson-media";
-const MAX_BYTES = 50 * 1024 * 1024; // 50 MB
+const DEFAULT_BUCKET = "pdfs";
+const MAX_BYTES = 200 * 1024 * 1024; // 200 MB (videos can be big)
 
-export const FileUploader = ({ accept, folder, currentUrl, onUploaded }: FileUploaderProps) => {
+export const FileUploader = ({ accept, folder, bucket, currentUrl, onUploaded }: FileUploaderProps) => {
+  const resolvedBucket = bucket ?? DEFAULT_BUCKET;
   const { toast } = useToast();
   const inputRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
@@ -27,7 +29,7 @@ export const FileUploader = ({ accept, folder, currentUrl, onUploaded }: FileUpl
     setUploading(true);
     const ext = file.name.split(".").pop() || "bin";
     const path = `${folder}/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
-    const { error } = await supabase.storage.from(BUCKET).upload(path, file, {
+    const { error } = await supabase.storage.from(resolvedBucket).upload(path, file, {
       cacheControl: "3600",
       upsert: false,
       contentType: file.type || undefined,
@@ -38,7 +40,7 @@ export const FileUploader = ({ accept, folder, currentUrl, onUploaded }: FileUpl
       return;
     }
     // Store path as URL (resolved via signed URL on download). For now we store public-style path.
-    const { data } = supabase.storage.from(BUCKET).getPublicUrl(path);
+    const { data } = supabase.storage.from(resolvedBucket).getPublicUrl(path);
     onUploaded(data.publicUrl);
     setUploading(false);
     toast({ title: "File uploaded" });

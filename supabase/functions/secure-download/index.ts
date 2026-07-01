@@ -6,15 +6,18 @@ const corsHeaders = {
   "Access-Control-Allow-Methods": "POST, OPTIONS",
 };
 
-const BUCKET = "lesson-media";
+const BUCKETS = ["pdfs", "illustrations", "videos", "lesson-media"] as const;
 const SIGNED_TTL = 120; // seconds
 
-function extractPath(input: string): string | null {
+function extractBucketAndPath(input: string): { bucket: string; path: string } | null {
   if (!input) return null;
-  // Match anything after `/lesson-media/` (public or sign URLs), else assume raw path
-  const m = input.match(/\/lesson-media\/(.+?)(\?|$)/);
-  if (m) return decodeURIComponent(m[1]);
-  if (!input.startsWith("http")) return input.replace(/^\/+/, "");
+  for (const b of BUCKETS) {
+    const re = new RegExp(`/${b}/(.+?)(\\?|$)`);
+    const m = input.match(re);
+    if (m) return { bucket: b, path: decodeURIComponent(m[1]) };
+  }
+  // Fallback: raw path in default bucket
+  if (!input.startsWith("http")) return { bucket: "pdfs", path: input.replace(/^\/+/, "") };
   return null;
 }
 
@@ -135,8 +138,8 @@ Deno.serve(async (req) => {
       }
     }
 
-    const path = extractPath(targetUrl);
-    if (!path) {
+    const parsed = extractBucketAndPath(targetUrl);
+    if (!parsed) {
       return new Response(JSON.stringify({ error: "Invalid file URL" }), {
         status: 400,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -144,8 +147,8 @@ Deno.serve(async (req) => {
     }
 
     const { data: signed, error: signErr } = await admin.storage
-      .from(BUCKET)
-      .createSignedUrl(path, SIGNED_TTL);
+      .from(parsed.bucket)
+      .createSignedUrl(parsed.path, SIGNED_TTL);
     if (signErr || !signed) {
       return new Response(JSON.stringify({ error: signErr?.message ?? "Sign failed" }), {
         status: 500,
