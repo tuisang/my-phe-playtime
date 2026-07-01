@@ -214,6 +214,7 @@ export const ResourcesManager = () => {
                 onChange={e => setForm({ ...form, url: e.target.value })} />
               <div className="mt-2">
                 <FileUploader accept={ACCEPT_BY_TYPE[form.type]} folder={`resources/${form.type}`}
+                  bucket={BUCKET_BY_TYPE[form.type]}
                   currentUrl={form.url} onUploaded={(url) => setForm(f => ({ ...f, url }))} />
               </div>
             </div>
