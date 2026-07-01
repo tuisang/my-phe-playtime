@@ -138,8 +138,8 @@ Deno.serve(async (req) => {
       }
     }
 
-    const path = extractPath(targetUrl);
-    if (!path) {
+    const parsed = extractBucketAndPath(targetUrl);
+    if (!parsed) {
       return new Response(JSON.stringify({ error: "Invalid file URL" }), {
         status: 400,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -147,8 +147,8 @@ Deno.serve(async (req) => {
     }
 
     const { data: signed, error: signErr } = await admin.storage
-      .from(BUCKET)
-      .createSignedUrl(path, SIGNED_TTL);
+      .from(parsed.bucket)
+      .createSignedUrl(parsed.path, SIGNED_TTL);
     if (signErr || !signed) {
       return new Response(JSON.stringify({ error: signErr?.message ?? "Sign failed" }), {
         status: 500,
