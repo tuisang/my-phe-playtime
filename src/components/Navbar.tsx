@@ -43,6 +43,10 @@ export const Navbar = ({ user, userRole }: NavbarProps) => {
             </div>
           </Link>
 
+          <div className="hidden md:block flex-1 max-w-md mx-6">
+            <SearchBar />
+          </div>
+
           <div className="flex items-center gap-4">
             {user ? (
               <>
