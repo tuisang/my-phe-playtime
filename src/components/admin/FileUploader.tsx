@@ -15,7 +15,8 @@ interface FileUploaderProps {
 const DEFAULT_BUCKET = "pdfs";
 const MAX_BYTES = 200 * 1024 * 1024; // 200 MB (videos can be big)
 
-export const FileUploader = ({ accept, folder, currentUrl, onUploaded }: FileUploaderProps) => {
+export const FileUploader = ({ accept, folder, bucket, currentUrl, onUploaded }: FileUploaderProps) => {
+  const resolvedBucket = bucket ?? DEFAULT_BUCKET;
   const { toast } = useToast();
   const inputRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
