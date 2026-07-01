@@ -6,7 +6,7 @@ import { SearchBar } from "@/components/SearchBar";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
-import { getGradeLabel, getGradeCategory } from "@/lib/grades";
+import { getGradeLabel, getCategoryForGrade } from "@/lib/grades";
 import { BookOpen, FolderOpen } from "lucide-react";
 
 type TopicHit = { id: string; title: string; description: string | null; grade: number };
@@ -84,7 +84,7 @@ const SearchPage = () => {
                       <Card className="p-4 hover:border-primary/60 transition-colors border-2">
                         <div className="flex items-start justify-between gap-2 mb-1">
                           <h3 className="font-bold">{t.title}</h3>
-                          <Badge variant="secondary" className={getGradeCategory(t.grade).badgeClass}>
+                          <Badge variant="secondary" className={getCategoryForGrade(t.grade)}>
                             {getGradeLabel(t.grade)}
                           </Badge>
                         </div>
@@ -110,7 +110,7 @@ const SearchPage = () => {
                       <Card className="p-4 hover:border-primary/60 transition-colors border-2">
                         <div className="flex items-start justify-between gap-2 mb-1">
                           <h3 className="font-bold">{l.title}</h3>
-                          <Badge variant="secondary" className={getGradeCategory(l.grade).badgeClass}>
+                          <Badge variant="secondary" className={getCategoryForGrade(l.grade)}>
                             {getGradeLabel(l.grade)}
                           </Badge>
                         </div>
