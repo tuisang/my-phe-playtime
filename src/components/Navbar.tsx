@@ -77,6 +77,9 @@ export const Navbar = ({ user, userRole }: NavbarProps) => {
             )}
           </div>
         </div>
+        <div className="md:hidden mt-3">
+          <SearchBar />
+        </div>
       </div>
     </nav>
   );
