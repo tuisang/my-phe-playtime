@@ -127,11 +127,17 @@ const Grade = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {topics.map((t) => {
               const c = counts[t.id] || { pdf_notes: 0, whiteboard_animation: 0, video: 0, readable_notes: 0 };
+              const isDone = completedIds.has(t.id);
               return (
                 <Link key={t.id} to={`/topic/${t.id}`}>
-                  <Card className={`group h-full cursor-pointer overflow-hidden border-4 border-transparent hover:${category.borderColor} transition-all duration-300 hover:scale-[1.02] hover:shadow-xl`}>
-                    <div className={`bg-gradient-to-br ${category.gradient} p-6 text-white`}>
-                      <h3 className="text-2xl font-bold mb-2">{t.title}</h3>
+                  <Card className={`group h-full cursor-pointer overflow-hidden border-4 ${isDone ? "border-green-500" : "border-transparent"} hover:${category.borderColor} transition-all duration-300 hover:scale-[1.02] hover:shadow-xl`}>
+                    <div className={`bg-gradient-to-br ${category.gradient} p-6 text-white relative`}>
+                      {isDone && (
+                        <div className="absolute top-3 right-3 bg-white/20 rounded-full p-1">
+                          <CheckCircle2 className="w-6 h-6 text-white" />
+                        </div>
+                      )}
+                      <h3 className="text-2xl font-bold mb-2 pr-8">{t.title}</h3>
                       <p className="text-sm opacity-90 line-clamp-2">{t.description}</p>
                     </div>
                     <div className="p-5 bg-card grid grid-cols-2 gap-3 text-sm font-semibold">
