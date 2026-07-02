@@ -103,6 +103,18 @@ const Grade = () => {
           <p className="text-xl">
             {topics.length} PHE topic{topics.length !== 1 ? "s" : ""} ready to explore
           </p>
+          {user && topics.length > 0 && (
+            <div className="mt-5 bg-white/15 rounded-2xl p-4 backdrop-blur-sm">
+              <div className="flex items-center justify-between text-sm font-bold mb-2">
+                <span>Your progress</span>
+                <span>{topics.filter(t => completedIds.has(t.id)).length} / {topics.length} completed</span>
+              </div>
+              <Progress
+                value={(topics.filter(t => completedIds.has(t.id)).length / topics.length) * 100}
+                className="h-3 bg-white/25"
+              />
+            </div>
+          )}
         </div>
 
         {isLoading ? (
