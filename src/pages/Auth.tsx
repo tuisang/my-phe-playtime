@@ -6,9 +6,17 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { GraduationCap } from "lucide-react";
+import { GraduationCap, Baby, Users, School } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { z } from "zod";
+
+type Role = "pupil" | "teacher" | "parent";
+
+const ROLES: { value: Role; label: string; desc: string; icon: typeof Baby }[] = [
+  { value: "pupil", label: "Pupil", desc: "I am a learner", icon: Baby },
+  { value: "teacher", label: "Teacher", desc: "I teach PHE", icon: School },
+  { value: "parent", label: "Parent", desc: "I help my child learn", icon: Users },
+];
 
 const authSchema = z.object({
   email: z.string().email("Please enter a valid email"),
