@@ -5,10 +5,12 @@ import { Navbar } from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ChevronLeft, FileText, Film, PlayCircle, BookOpen, Download, ExternalLink } from "lucide-react";
+import { ChevronLeft, FileText, Film, PlayCircle, BookOpen, Download, ExternalLink, CheckCircle2, Circle } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { getCategoryForGrade, getGradeLabel } from "@/lib/grades";
 import { openSecureDownload } from "@/lib/secureDownload";
+import { isTopicCompleted, markTopicCompleted, unmarkTopicCompleted } from "@/lib/progress";
+import { useToast } from "@/hooks/use-toast";
 
 interface Topic {
   id: string;
