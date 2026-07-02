@@ -49,6 +49,7 @@ const Grade = () => {
           .eq("user_id", session.user.id)
           .maybeSingle();
         if (roleData) setUserRole(roleData.role);
+        setCompletedIds(await getCompletedTopicIds(session.user.id));
       }
 
       const { data: topicsData } = await supabase
