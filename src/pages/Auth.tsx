@@ -50,7 +50,7 @@ const Auth = () => {
     try {
       const validated = authSchema.parse({ email, password, fullName });
       
-      const { error } = await supabase.auth.signUp({
+      const { data, error } = await supabase.auth.signUp({
         email: validated.email,
         password: validated.password,
         options: {
@@ -63,9 +63,14 @@ const Auth = () => {
 
       if (error) throw error;
 
+      // Assign selected role
+      if (data.user) {
+        await supabase.from("user_roles").insert({ user_id: data.user.id, role });
+      }
+
       toast({
-        title: "Account created!",
-        description: "Welcome to My PHE Today. You can now sign in.",
+        title: "Welcome to My PHE Today!",
+        description: `Your ${role} account is ready. You can now sign in.`,
       });
     } catch (error: any) {
       toast({
