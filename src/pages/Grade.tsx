@@ -31,6 +31,7 @@ const Grade = () => {
   const [userRole, setUserRole] = useState<string>("");
   const [topics, setTopics] = useState<Topic[]>([]);
   const [counts, setCounts] = useState<Record<string, ResourceCount>>({});
+  const [completedIds, setCompletedIds] = useState<Set<string>>(new Set());
   const [isLoading, setIsLoading] = useState(true);
 
   const gradeNum = parseInt(grade || "1", 10);
