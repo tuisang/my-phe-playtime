@@ -4,10 +4,12 @@ import { supabase } from "@/integrations/supabase/client";
 import { Navbar } from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { ChevronLeft, FileText, Film, PlayCircle, BookOpen } from "lucide-react";
+import { ChevronLeft, FileText, Film, PlayCircle, BookOpen, CheckCircle2 } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Progress } from "@/components/ui/progress";
 import { Link } from "react-router-dom";
 import { getCategoryForGrade, getGradeLabel } from "@/lib/grades";
+import { getCompletedTopicIds } from "@/lib/progress";
 
 interface Topic {
   id: string;
