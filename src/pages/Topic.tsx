@@ -66,6 +66,10 @@ const Topic = () => {
           .eq("user_id", session.user.id)
           .maybeSingle();
         if (roleData) setUserRole(roleData.role);
+
+        if (id) {
+          setCompleted(await isTopicCompleted(session.user.id, id));
+        }
       }
 
       const { data: topicData } = await supabase
