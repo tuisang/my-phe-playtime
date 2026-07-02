@@ -119,6 +119,24 @@ const Topic = () => {
 
   const category = getCategoryForGrade(topic.grade);
 
+  const toggleCompleted = async () => {
+    if (!user) {
+      navigate("/auth");
+      return;
+    }
+    setSavingProgress(true);
+    if (completed) {
+      await unmarkTopicCompleted(user.id, topic.id);
+      setCompleted(false);
+      toast({ title: "Marked as not done" });
+    } else {
+      await markTopicCompleted(user.id, topic.id);
+      setCompleted(true);
+      toast({ title: "Great job! Topic completed 🎉" });
+    }
+    setSavingProgress(false);
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-muted to-background">
       <Navbar user={user} userRole={userRole} />
@@ -134,13 +152,30 @@ const Topic = () => {
           Back to {getGradeLabel(topic.grade)}
         </Button>
 
-        <div className={`bg-gradient-to-r ${category.gradient} rounded-3xl p-8 mb-10 text-white shadow-2xl`}>
+        <div className={`bg-gradient-to-r ${category.gradient} rounded-3xl p-8 mb-6 text-white shadow-2xl`}>
           <Badge className="mb-3 bg-white/20 text-white border-0 text-sm">
             {category.name} · {getGradeLabel(topic.grade)}
           </Badge>
           <h1 className="text-4xl md:text-5xl font-bold mb-3">{topic.title}</h1>
           <p className="text-lg opacity-95">{topic.description}</p>
         </div>
+
+        {user && (
+          <Button
+            onClick={toggleCompleted}
+            disabled={savingProgress}
+            size="lg"
+            variant={completed ? "secondary" : "default"}
+            className="mb-10 font-bold text-base"
+          >
+            {completed ? (
+              <><CheckCircle2 className="w-5 h-5 mr-2" /> Completed — tap to undo</>
+            ) : (
+              <><Circle className="w-5 h-5 mr-2" /> Mark this topic as completed</>
+            )}
+          </Button>
+        )}
+
 
         <div className="space-y-10">
           {SECTIONS.map((section) => {
