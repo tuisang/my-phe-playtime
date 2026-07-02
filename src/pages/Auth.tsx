@@ -198,6 +198,31 @@ const Auth = () => {
                   className="text-lg"
                 />
               </div>
+              <div className="space-y-2">
+                <Label>I am a...</Label>
+                <div className="grid grid-cols-3 gap-2">
+                  {ROLES.map((r) => {
+                    const Icon = r.icon;
+                    const active = role === r.value;
+                    return (
+                      <button
+                        type="button"
+                        key={r.value}
+                        onClick={() => setRole(r.value)}
+                        className={`flex flex-col items-center gap-1 rounded-xl border-2 p-3 transition-all ${
+                          active
+                            ? "border-primary bg-primary/10 text-primary"
+                            : "border-border hover:border-primary/40"
+                        }`}
+                      >
+                        <Icon className="w-6 h-6" />
+                        <span className="text-sm font-bold">{r.label}</span>
+                        <span className="text-[10px] text-muted-foreground text-center leading-tight">{r.desc}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
               <Button type="submit" className="w-full text-lg py-6" disabled={isLoading}>
                 {isLoading ? "Creating account..." : "Sign Up"}
               </Button>
