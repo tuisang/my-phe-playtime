@@ -50,6 +50,11 @@ export const Navbar = ({ user, userRole }: NavbarProps) => {
           <div className="flex items-center gap-4">
             {user ? (
               <>
+                <Link to="/history">
+                  <Button variant="ghost" size="lg" className="font-bold hidden sm:inline-flex">
+                    My Purchases
+                  </Button>
+                </Link>
                 {userRole === 'admin' && (
                   <Link to="/admin">
                     <Button variant="secondary" size="lg" className="font-bold">
