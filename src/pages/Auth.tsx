@@ -6,9 +6,17 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { GraduationCap } from "lucide-react";
+import { GraduationCap, Baby, Users, School } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { z } from "zod";
+
+type Role = "pupil" | "teacher" | "parent";
+
+const ROLES: { value: Role; label: string; desc: string; icon: typeof Baby }[] = [
+  { value: "pupil", label: "Pupil", desc: "I am a learner", icon: Baby },
+  { value: "teacher", label: "Teacher", desc: "I teach PHE", icon: School },
+  { value: "parent", label: "Parent", desc: "I help my child learn", icon: Users },
+];
 
 const authSchema = z.object({
   email: z.string().email("Please enter a valid email"),
@@ -23,6 +31,7 @@ const Auth = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
+  const [role, setRole] = useState<Role>("pupil");
 
   useEffect(() => {
     const checkUser = async () => {
@@ -41,7 +50,7 @@ const Auth = () => {
     try {
       const validated = authSchema.parse({ email, password, fullName });
       
-      const { error } = await supabase.auth.signUp({
+      const { data, error } = await supabase.auth.signUp({
         email: validated.email,
         password: validated.password,
         options: {
@@ -54,9 +63,14 @@ const Auth = () => {
 
       if (error) throw error;
 
+      // Assign selected role
+      if (data.user) {
+        await supabase.from("user_roles").insert({ user_id: data.user.id, role });
+      }
+
       toast({
-        title: "Account created!",
-        description: "Welcome to My PHE Today. You can now sign in.",
+        title: "Welcome to My PHE Today!",
+        description: `Your ${role} account is ready. You can now sign in.`,
       });
     } catch (error: any) {
       toast({
@@ -183,6 +197,31 @@ const Auth = () => {
                   required
                   className="text-lg"
                 />
+              </div>
+              <div className="space-y-2">
+                <Label>I am a...</Label>
+                <div className="grid grid-cols-3 gap-2">
+                  {ROLES.map((r) => {
+                    const Icon = r.icon;
+                    const active = role === r.value;
+                    return (
+                      <button
+                        type="button"
+                        key={r.value}
+                        onClick={() => setRole(r.value)}
+                        className={`flex flex-col items-center gap-1 rounded-xl border-2 p-3 transition-all ${
+                          active
+                            ? "border-primary bg-primary/10 text-primary"
+                            : "border-border hover:border-primary/40"
+                        }`}
+                      >
+                        <Icon className="w-6 h-6" />
+                        <span className="text-sm font-bold">{r.label}</span>
+                        <span className="text-[10px] text-muted-foreground text-center leading-tight">{r.desc}</span>
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
               <Button type="submit" className="w-full text-lg py-6" disabled={isLoading}>
                 {isLoading ? "Creating account..." : "Sign Up"}

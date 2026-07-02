@@ -4,10 +4,12 @@ import { supabase } from "@/integrations/supabase/client";
 import { Navbar } from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { ChevronLeft, FileText, Film, PlayCircle, BookOpen } from "lucide-react";
+import { ChevronLeft, FileText, Film, PlayCircle, BookOpen, CheckCircle2 } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Progress } from "@/components/ui/progress";
 import { Link } from "react-router-dom";
 import { getCategoryForGrade, getGradeLabel } from "@/lib/grades";
+import { getCompletedTopicIds } from "@/lib/progress";
 
 interface Topic {
   id: string;
@@ -29,6 +31,7 @@ const Grade = () => {
   const [userRole, setUserRole] = useState<string>("");
   const [topics, setTopics] = useState<Topic[]>([]);
   const [counts, setCounts] = useState<Record<string, ResourceCount>>({});
+  const [completedIds, setCompletedIds] = useState<Set<string>>(new Set());
   const [isLoading, setIsLoading] = useState(true);
 
   const gradeNum = parseInt(grade || "1", 10);
@@ -46,6 +49,7 @@ const Grade = () => {
           .eq("user_id", session.user.id)
           .maybeSingle();
         if (roleData) setUserRole(roleData.role);
+        setCompletedIds(await getCompletedTopicIds(session.user.id));
       }
 
       const { data: topicsData } = await supabase
@@ -99,6 +103,18 @@ const Grade = () => {
           <p className="text-xl">
             {topics.length} PHE topic{topics.length !== 1 ? "s" : ""} ready to explore
           </p>
+          {user && topics.length > 0 && (
+            <div className="mt-5 bg-white/15 rounded-2xl p-4 backdrop-blur-sm">
+              <div className="flex items-center justify-between text-sm font-bold mb-2">
+                <span>Your progress</span>
+                <span>{topics.filter(t => completedIds.has(t.id)).length} / {topics.length} completed</span>
+              </div>
+              <Progress
+                value={(topics.filter(t => completedIds.has(t.id)).length / topics.length) * 100}
+                className="h-3 bg-white/25"
+              />
+            </div>
+          )}
         </div>
 
         {isLoading ? (
@@ -111,11 +127,17 @@ const Grade = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {topics.map((t) => {
               const c = counts[t.id] || { pdf_notes: 0, whiteboard_animation: 0, video: 0, readable_notes: 0 };
+              const isDone = completedIds.has(t.id);
               return (
                 <Link key={t.id} to={`/topic/${t.id}`}>
-                  <Card className={`group h-full cursor-pointer overflow-hidden border-4 border-transparent hover:${category.borderColor} transition-all duration-300 hover:scale-[1.02] hover:shadow-xl`}>
-                    <div className={`bg-gradient-to-br ${category.gradient} p-6 text-white`}>
-                      <h3 className="text-2xl font-bold mb-2">{t.title}</h3>
+                  <Card className={`group h-full cursor-pointer overflow-hidden border-4 ${isDone ? "border-green-500" : "border-transparent"} hover:${category.borderColor} transition-all duration-300 hover:scale-[1.02] hover:shadow-xl`}>
+                    <div className={`bg-gradient-to-br ${category.gradient} p-6 text-white relative`}>
+                      {isDone && (
+                        <div className="absolute top-3 right-3 bg-white/20 rounded-full p-1">
+                          <CheckCircle2 className="w-6 h-6 text-white" />
+                        </div>
+                      )}
+                      <h3 className="text-2xl font-bold mb-2 pr-8">{t.title}</h3>
                       <p className="text-sm opacity-90 line-clamp-2">{t.description}</p>
                     </div>
                     <div className="p-5 bg-card grid grid-cols-2 gap-3 text-sm font-semibold">
