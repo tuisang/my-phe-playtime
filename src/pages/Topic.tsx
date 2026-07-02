@@ -50,6 +50,9 @@ const Topic = () => {
   const [topic, setTopic] = useState<Topic | null>(null);
   const [resources, setResources] = useState<Resource[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [completed, setCompleted] = useState(false);
+  const [savingProgress, setSavingProgress] = useState(false);
+  const { toast } = useToast();
 
   useEffect(() => {
     const fetchData = async () => {
