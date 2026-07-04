@@ -6,7 +6,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Card } from "@/components/ui/card";
 import { GRADE_CATEGORIES } from "@/lib/grades";
 import { getGradeProgress } from "@/lib/progress";
-import { Baby, School, Users, Sparkles } from "lucide-react";
+import { getUserStats, type UserStats } from "@/lib/gamification";
+import { Baby, School, Users, Sparkles, Flame, Trophy } from "lucide-react";
 
 const ROLE_INFO: Record<string, { title: string; blurb: string; icon: typeof Baby; accent: string }> = {
   pupil: { title: "Hi, superstar learner!", blurb: "Pick a class and start playing, watching, and learning.", icon: Baby, accent: "from-orange-400 to-rose-400" },
@@ -20,6 +21,7 @@ const Home = () => {
   const [userRole, setUserRole] = useState<string>("");
   const [lessonCounts, setLessonCounts] = useState<{ [key: number]: number }>({});
   const [progressByGrade, setProgressByGrade] = useState<Record<number, { total: number; done: number }>>({});
+  const [stats, setStats] = useState<UserStats | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -35,6 +37,7 @@ const Home = () => {
           .maybeSingle();
         if (roleData) setUserRole(roleData.role);
         setProgressByGrade(await getGradeProgress(session.user.id));
+        setStats(await getUserStats(session.user.id));
       }
 
       const { data: lessons } = await supabase
@@ -88,6 +91,48 @@ const Home = () => {
                   <p className="text-3xl font-bold">{doneTopics} / {totalTopics}</p>
                 </div>
               )}
+            </div>
+          </Card>
+        )}
+
+        {user && stats && userRole !== "admin" && (
+          <Card className="mb-8 p-5 md:p-6 border-4 border-primary/10 bg-gradient-to-br from-yellow-50 via-orange-50 to-rose-50 dark:from-yellow-950/20 dark:via-orange-950/20 dark:to-rose-950/20">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+              <div className="text-center p-3 rounded-2xl bg-white/70 dark:bg-background/40">
+                <Trophy className="w-6 h-6 mx-auto text-yellow-500 mb-1" />
+                <p className="text-xs uppercase font-bold text-muted-foreground">Points</p>
+                <p className="text-2xl font-bold">{stats.points}</p>
+              </div>
+              <div className="text-center p-3 rounded-2xl bg-white/70 dark:bg-background/40">
+                <Flame className="w-6 h-6 mx-auto text-orange-500 mb-1" />
+                <p className="text-xs uppercase font-bold text-muted-foreground">Streak</p>
+                <p className="text-2xl font-bold">{stats.streakDays}d</p>
+              </div>
+              <div className="text-center p-3 rounded-2xl bg-white/70 dark:bg-background/40">
+                <Sparkles className="w-6 h-6 mx-auto text-primary mb-1" />
+                <p className="text-xs uppercase font-bold text-muted-foreground">Stars</p>
+                <p className="text-2xl font-bold">{stats.totalStars}</p>
+              </div>
+              <div className="text-center p-3 rounded-2xl bg-white/70 dark:bg-background/40">
+                <School className="w-6 h-6 mx-auto text-secondary mb-1" />
+                <p className="text-xs uppercase font-bold text-muted-foreground">Topics</p>
+                <p className="text-2xl font-bold">{stats.topicsDone}</p>
+              </div>
+            </div>
+            <div className="flex flex-wrap gap-2 justify-center">
+              {stats.badges.map(b => (
+                <div
+                  key={b.id}
+                  title={b.hint}
+                  className={`px-3 py-1.5 rounded-full text-sm font-semibold border-2 ${
+                    b.earned
+                      ? "bg-gradient-to-r from-yellow-300 to-orange-400 text-white border-orange-500 shadow"
+                      : "bg-muted text-muted-foreground border-transparent opacity-60"
+                  }`}
+                >
+                  <span className="mr-1">{b.emoji}</span>{b.label}
+                </div>
+              ))}
             </div>
           </Card>
         )}

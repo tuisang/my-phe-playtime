@@ -10,6 +10,9 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { getCategoryForGrade, getGradeLabel } from "@/lib/grades";
 import { openSecureDownload } from "@/lib/secureDownload";
 import { isTopicCompleted, markTopicCompleted, unmarkTopicCompleted } from "@/lib/progress";
+import { awardPoints, POINTS } from "@/lib/gamification";
+import { BookmarkButton } from "@/components/BookmarkButton";
+import { Quiz } from "@/components/Quiz";
 import { useToast } from "@/hooks/use-toast";
 
 interface Topic {
@@ -131,8 +134,9 @@ const Topic = () => {
       toast({ title: "Marked as not done" });
     } else {
       await markTopicCompleted(user.id, topic.id);
+      await awardPoints(user.id, POINTS.topic_completed, "topic_completed", topic.id);
       setCompleted(true);
-      toast({ title: "Great job! Topic completed 🎉" });
+      toast({ title: `Great job! +${POINTS.topic_completed} points 🎉` });
     }
     setSavingProgress(false);
   };
@@ -160,21 +164,24 @@ const Topic = () => {
           <p className="text-lg opacity-95">{topic.description}</p>
         </div>
 
-        {user && (
-          <Button
-            onClick={toggleCompleted}
-            disabled={savingProgress}
-            size="lg"
-            variant={completed ? "secondary" : "default"}
-            className="mb-10 font-bold text-base"
-          >
-            {completed ? (
-              <><CheckCircle2 className="w-5 h-5 mr-2" /> Completed — tap to undo</>
-            ) : (
-              <><Circle className="w-5 h-5 mr-2" /> Mark this topic as completed</>
-            )}
-          </Button>
-        )}
+        <div className="flex flex-wrap gap-3 mb-10">
+          {user && (
+            <Button
+              onClick={toggleCompleted}
+              disabled={savingProgress}
+              size="lg"
+              variant={completed ? "secondary" : "default"}
+              className="font-bold text-base"
+            >
+              {completed ? (
+                <><CheckCircle2 className="w-5 h-5 mr-2" /> Completed — tap to undo</>
+              ) : (
+                <><Circle className="w-5 h-5 mr-2" /> Mark as completed</>
+              )}
+            </Button>
+          )}
+          <BookmarkButton topicId={topic.id} />
+        </div>
 
 
         <div className="space-y-10">
@@ -228,6 +235,8 @@ const Topic = () => {
             );
           })}
         </div>
+
+        <Quiz topicId={topic.id} userId={user?.id ?? null} />
       </main>
     </div>
   );
