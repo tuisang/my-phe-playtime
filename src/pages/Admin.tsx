@@ -9,6 +9,7 @@ import { useToast } from "@/hooks/use-toast";
 import { TopicsManager } from "@/components/admin/TopicsManager";
 import { LessonsManager } from "@/components/admin/LessonsManager";
 import { ResourcesManager } from "@/components/admin/ResourcesManager";
+import { QuizzesManager } from "@/components/admin/QuizzesManager";
 
 const Admin = () => {
   const navigate = useNavigate();
@@ -83,10 +84,11 @@ const Admin = () => {
 
         <Card className="p-4 md:p-6 border-4 border-primary/10">
           <Tabs defaultValue="topics" className="w-full">
-            <TabsList className="grid w-full grid-cols-3 mb-6">
+            <TabsList className="grid w-full grid-cols-4 mb-6">
               <TabsTrigger value="topics" className="text-base">Topics</TabsTrigger>
               <TabsTrigger value="lessons" className="text-base">Lessons</TabsTrigger>
               <TabsTrigger value="resources" className="text-base">Resources</TabsTrigger>
+              <TabsTrigger value="quizzes" className="text-base">Quizzes</TabsTrigger>
             </TabsList>
             <TabsContent value="topics">
               <TopicsManager />
@@ -96,6 +98,9 @@ const Admin = () => {
             </TabsContent>
             <TabsContent value="resources">
               <ResourcesManager />
+            </TabsContent>
+            <TabsContent value="quizzes">
+              <QuizzesManager />
             </TabsContent>
           </Tabs>
         </Card>
