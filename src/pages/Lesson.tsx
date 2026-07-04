@@ -9,6 +9,7 @@ import { ChevronLeft, Download, FileText, Image as ImageIcon, PlayCircle, Lock }
 import { getGradeLabel } from "@/lib/grades";
 import { useToast } from "@/hooks/use-toast";
 import { openSecureDownload } from "@/lib/secureDownload";
+import { BookmarkButton } from "@/components/BookmarkButton";
 
 interface LessonData {
   id: string;
@@ -132,7 +133,10 @@ const Lesson = () => {
         </Button>
 
         <div className="mb-8">
-          <Badge className="mb-4 text-lg px-4 py-2">{getGradeLabel(lesson.grade)}</Badge>
+          <div className="flex items-start justify-between gap-4 flex-wrap">
+            <Badge className="mb-4 text-lg px-4 py-2">{getGradeLabel(lesson.grade)}</Badge>
+            <BookmarkButton lessonId={lesson.id} />
+          </div>
           <h1 className="text-5xl font-bold mb-4 text-foreground">{lesson.title}</h1>
           <p className="text-xl text-muted-foreground">{lesson.description}</p>
         </div>
