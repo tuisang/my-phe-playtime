@@ -10,6 +10,9 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { getCategoryForGrade, getGradeLabel } from "@/lib/grades";
 import { openSecureDownload } from "@/lib/secureDownload";
 import { isTopicCompleted, markTopicCompleted, unmarkTopicCompleted } from "@/lib/progress";
+import { awardPoints, POINTS } from "@/lib/gamification";
+import { BookmarkButton } from "@/components/BookmarkButton";
+import { Quiz } from "@/components/Quiz";
 import { useToast } from "@/hooks/use-toast";
 
 interface Topic {
@@ -131,8 +134,9 @@ const Topic = () => {
       toast({ title: "Marked as not done" });
     } else {
       await markTopicCompleted(user.id, topic.id);
+      await awardPoints(user.id, POINTS.topic_completed, "topic_completed", topic.id);
       setCompleted(true);
-      toast({ title: "Great job! Topic completed 🎉" });
+      toast({ title: `Great job! +${POINTS.topic_completed} points 🎉` });
     }
     setSavingProgress(false);
   };
