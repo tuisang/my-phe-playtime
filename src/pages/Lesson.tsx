@@ -137,10 +137,17 @@ const Lesson = () => {
         <div className="mb-8">
           <div className="flex items-start justify-between gap-4 flex-wrap">
             <Badge className="mb-4 text-lg px-4 py-2">{getGradeLabel(lesson.grade)}</Badge>
-            <BookmarkButton lessonId={lesson.id} />
+            <div className="flex items-center gap-2">
+              <SpeakButton
+                text={`${useI18n().tr(lesson.title)}. ${useI18n().tr(lesson.description ?? "")}`}
+                label="Read aloud"
+                size="lg"
+              />
+              <BookmarkButton lessonId={lesson.id} />
+            </div>
           </div>
-          <h1 className="text-5xl font-bold mb-4 text-foreground">{lesson.title}</h1>
-          <p className="text-xl text-muted-foreground">{lesson.description}</p>
+          <h1 className="text-5xl font-bold mb-4 text-foreground">{useI18n().tr(lesson.title)}</h1>
+          <p className="text-xl text-muted-foreground">{useI18n().tr(lesson.description ?? "")}</p>
         </div>
 
         {lesson.video_url && (
