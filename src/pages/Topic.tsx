@@ -14,6 +14,7 @@ import { awardPoints, POINTS } from "@/lib/gamification";
 import { BookmarkButton } from "@/components/BookmarkButton";
 import { Quiz } from "@/components/Quiz";
 import { useToast } from "@/hooks/use-toast";
+import { useI18n } from "@/lib/i18n";
 
 interface Topic {
   id: string;
@@ -56,6 +57,7 @@ const Topic = () => {
   const [completed, setCompleted] = useState(false);
   const [savingProgress, setSavingProgress] = useState(false);
   const { toast } = useToast();
+  const { tr, t } = useI18n();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -160,8 +162,8 @@ const Topic = () => {
           <Badge className="mb-3 bg-white/20 text-white border-0 text-sm">
             {category.name} · {getGradeLabel(topic.grade)}
           </Badge>
-          <h1 className="text-4xl md:text-5xl font-bold mb-3">{topic.title}</h1>
-          <p className="text-lg opacity-95">{topic.description}</p>
+          <h1 className="text-4xl md:text-5xl font-bold mb-3">{tr(topic.title)}</h1>
+          <p className="text-lg opacity-95">{tr(topic.description)}</p>
         </div>
 
         <div className="flex flex-wrap gap-3 mb-10">
@@ -174,9 +176,9 @@ const Topic = () => {
               className="font-bold text-base"
             >
               {completed ? (
-                <><CheckCircle2 className="w-5 h-5 mr-2" /> Completed — tap to undo</>
+                <><CheckCircle2 className="w-5 h-5 mr-2" /> {t("topic.completedUndo")}</>
               ) : (
-                <><Circle className="w-5 h-5 mr-2" /> Mark as completed</>
+                <><Circle className="w-5 h-5 mr-2" /> {t("topic.markCompleted")}</>
               )}
             </Button>
           )}
@@ -213,9 +215,9 @@ const Topic = () => {
                       <Card key={r.id} className="p-5 border-2 hover:border-primary/40 transition-colors">
                         <div className="flex items-start justify-between gap-4">
                           <div className="flex-1 min-w-0">
-                            <h3 className="font-bold text-lg text-foreground mb-1">{r.title}</h3>
+                            <h3 className="font-bold text-lg text-foreground mb-1">{tr(r.title)}</h3>
                             {r.description && (
-                              <p className="text-sm text-muted-foreground line-clamp-2">{r.description}</p>
+                              <p className="text-sm text-muted-foreground line-clamp-2">{tr(r.description)}</p>
                             )}
                           </div>
                         </div>

@@ -4,6 +4,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { SearchBar } from "@/components/SearchBar";
+import { LanguageToggle } from "@/components/LanguageToggle";
+import { useI18n } from "@/lib/i18n";
 
 interface NavbarProps {
   user?: any;
@@ -13,6 +15,7 @@ interface NavbarProps {
 export const Navbar = ({ user, userRole }: NavbarProps) => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { t } = useI18n();
 
   const handleSignOut = async () => {
     const { error } = await supabase.auth.signOut();
@@ -30,7 +33,7 @@ export const Navbar = ({ user, userRole }: NavbarProps) => {
   return (
     <nav className="sticky top-0 z-50 bg-card/95 backdrop-blur-sm border-b-4 border-primary/20 shadow-lg">
       <div className="container mx-auto px-4 py-4">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between gap-3">
           <Link to="/" className="flex items-center gap-2 group">
             <div className="p-2 bg-gradient-to-br from-primary to-secondary rounded-full">
               <GraduationCap className="w-8 h-8 text-white" />
@@ -39,7 +42,7 @@ export const Navbar = ({ user, userRole }: NavbarProps) => {
               <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
                 My PHE Today
               </h1>
-              <p className="text-xs text-muted-foreground">Physical & Health Education</p>
+              <p className="text-xs text-muted-foreground">{t("nav.tagline")}</p>
             </div>
           </Link>
 
@@ -47,18 +50,19 @@ export const Navbar = ({ user, userRole }: NavbarProps) => {
             <SearchBar />
           </div>
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 md:gap-4 flex-wrap justify-end">
+            <LanguageToggle />
             {user ? (
               <>
                 <Link to="/history">
                   <Button variant="ghost" size="lg" className="font-bold hidden sm:inline-flex">
-                    My Purchases
+                    {t("nav.myPurchases")}
                   </Button>
                 </Link>
                 {userRole === 'admin' && (
                   <Link to="/admin">
                     <Button variant="secondary" size="lg" className="font-bold">
-                      Admin Panel
+                      {t("nav.adminPanel")}
                     </Button>
                   </Link>
                 )}
@@ -69,14 +73,14 @@ export const Navbar = ({ user, userRole }: NavbarProps) => {
                   className="font-bold"
                 >
                   <LogOut className="w-4 h-4 mr-2" />
-                  Sign Out
+                  <span className="hidden sm:inline">{t("nav.signOut")}</span>
                 </Button>
               </>
             ) : (
               <Link to="/auth">
                 <Button size="lg" className="font-bold">
                   <User className="w-4 h-4 mr-2" />
-                  Sign In
+                  {t("nav.signIn")}
                 </Button>
               </Link>
             )}

@@ -12,29 +12,32 @@ import Admin from "./pages/Admin";
 import Search from "./pages/Search";
 import History from "./pages/History";
 import NotFound from "./pages/NotFound";
+import { I18nProvider } from "@/lib/i18n";
 
 const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/auth" element={<Auth />} />
-          <Route path="/grade/:grade" element={<Grade />} />
-          <Route path="/topic/:id" element={<Topic />} />
-          <Route path="/lesson/:id" element={<Lesson />} />
-          <Route path="/admin" element={<Admin />} />
-          <Route path="/search" element={<Search />} />
-          <Route path="/history" element={<History />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </TooltipProvider>
+    <I18nProvider>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/auth" element={<Auth />} />
+            <Route path="/grade/:grade" element={<Grade />} />
+            <Route path="/topic/:id" element={<Topic />} />
+            <Route path="/lesson/:id" element={<Lesson />} />
+            <Route path="/admin" element={<Admin />} />
+            <Route path="/search" element={<Search />} />
+            <Route path="/history" element={<History />} />
+            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </TooltipProvider>
+    </I18nProvider>
   </QueryClientProvider>
 );
 

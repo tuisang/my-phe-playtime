@@ -10,6 +10,7 @@ import { Progress } from "@/components/ui/progress";
 import { Link } from "react-router-dom";
 import { getCategoryForGrade, getGradeLabel } from "@/lib/grades";
 import { getCompletedTopicIds } from "@/lib/progress";
+import { useI18n } from "@/lib/i18n";
 
 interface Topic {
   id: string;
@@ -33,6 +34,7 @@ const Grade = () => {
   const [counts, setCounts] = useState<Record<string, ResourceCount>>({});
   const [completedIds, setCompletedIds] = useState<Set<string>>(new Set());
   const [isLoading, setIsLoading] = useState(true);
+  const { tr } = useI18n();
 
   const gradeNum = parseInt(grade || "1", 10);
   const category = getCategoryForGrade(gradeNum);
@@ -137,8 +139,8 @@ const Grade = () => {
                           <CheckCircle2 className="w-6 h-6 text-white" />
                         </div>
                       )}
-                      <h3 className="text-2xl font-bold mb-2 pr-8">{t.title}</h3>
-                      <p className="text-sm opacity-90 line-clamp-2">{t.description}</p>
+                     <h3 className="text-2xl font-bold mb-2 pr-8">{tr(t.title)}</h3>
+                     <p className="text-sm opacity-90 line-clamp-2">{tr(t.description)}</p>
                     </div>
                     <div className="p-5 bg-card grid grid-cols-2 gap-3 text-sm font-semibold">
                       <div className="flex items-center gap-2 text-foreground">
