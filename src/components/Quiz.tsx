@@ -7,6 +7,8 @@ import { Label } from "@/components/ui/label";
 import { Star, Trophy, RotateCcw, Sparkles } from "lucide-react";
 import { awardPoints, POINTS } from "@/lib/gamification";
 import { useToast } from "@/hooks/use-toast";
+import { SpeakButton } from "@/components/SpeakButton";
+import { useI18n } from "@/lib/i18n";
 
 interface Question {
   id: string;
@@ -85,7 +87,13 @@ export const Quiz = ({ topicId, userId, onCompleted }: Props) => {
           <div className="space-y-6">
             {questions.map((q, idx) => (
               <div key={q.id} className="space-y-3">
-                <p className="font-bold text-lg text-foreground">{idx + 1}. {q.question}</p>
+                <div className="flex items-start gap-2">
+                  <p className="font-bold text-lg text-foreground flex-1">{idx + 1}. {q.question}</p>
+                  <SpeakButton
+                    text={`Question ${idx + 1}. ${q.question}. Options: ${q.options.join(". ")}`}
+                    variant="ghost"
+                  />
+                </div>
                 <RadioGroup
                   value={answers[q.id]?.toString() ?? ""}
                   onValueChange={(v) => setAnswers({ ...answers, [q.id]: Number(v) })}
