@@ -15,6 +15,7 @@ import { BookmarkButton } from "@/components/BookmarkButton";
 import { Quiz } from "@/components/Quiz";
 import { useToast } from "@/hooks/use-toast";
 import { useI18n } from "@/lib/i18n";
+import { SpeakButton } from "@/components/SpeakButton";
 
 interface Topic {
   id: string;
@@ -162,7 +163,15 @@ const Topic = () => {
           <Badge className="mb-3 bg-white/20 text-white border-0 text-sm">
             {category.name} · {getGradeLabel(topic.grade)}
           </Badge>
-          <h1 className="text-4xl md:text-5xl font-bold mb-3">{tr(topic.title)}</h1>
+          <div className="flex items-start justify-between gap-3">
+            <h1 className="text-4xl md:text-5xl font-bold mb-3 flex-1">{tr(topic.title)}</h1>
+            <SpeakButton
+              text={`${tr(topic.title)}. ${tr(topic.description)}`}
+              variant="secondary"
+              size="lg"
+              className="shrink-0 bg-white/20 hover:bg-white/30 text-white border-0"
+            />
+          </div>
           <p className="text-lg opacity-95">{tr(topic.description)}</p>
         </div>
 

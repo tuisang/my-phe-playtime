@@ -10,6 +10,8 @@ import { getGradeLabel } from "@/lib/grades";
 import { useToast } from "@/hooks/use-toast";
 import { openSecureDownload } from "@/lib/secureDownload";
 import { BookmarkButton } from "@/components/BookmarkButton";
+import { SpeakButton } from "@/components/SpeakButton";
+import { useI18n } from "@/lib/i18n";
 
 interface LessonData {
   id: string;
@@ -31,6 +33,7 @@ const Lesson = () => {
   const [lesson, setLesson] = useState<LessonData | null>(null);
   const [isPurchased, setIsPurchased] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const { tr } = useI18n();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -135,10 +138,17 @@ const Lesson = () => {
         <div className="mb-8">
           <div className="flex items-start justify-between gap-4 flex-wrap">
             <Badge className="mb-4 text-lg px-4 py-2">{getGradeLabel(lesson.grade)}</Badge>
-            <BookmarkButton lessonId={lesson.id} />
+            <div className="flex items-center gap-2">
+              <SpeakButton
+                text={`${tr(lesson.title)}. ${tr(lesson.description ?? "")}`}
+                label="Read aloud"
+                size="lg"
+              />
+              <BookmarkButton lessonId={lesson.id} />
+            </div>
           </div>
-          <h1 className="text-5xl font-bold mb-4 text-foreground">{lesson.title}</h1>
-          <p className="text-xl text-muted-foreground">{lesson.description}</p>
+          <h1 className="text-5xl font-bold mb-4 text-foreground">{tr(lesson.title)}</h1>
+          <p className="text-xl text-muted-foreground">{tr(lesson.description ?? "")}</p>
         </div>
 
         {lesson.video_url && (
