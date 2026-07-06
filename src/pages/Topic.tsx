@@ -215,9 +215,9 @@ const Topic = () => {
                       <Card key={r.id} className="p-5 border-2 hover:border-primary/40 transition-colors">
                         <div className="flex items-start justify-between gap-4">
                           <div className="flex-1 min-w-0">
-                            <h3 className="font-bold text-lg text-foreground mb-1">{r.title}</h3>
+                            <h3 className="font-bold text-lg text-foreground mb-1">{tr(r.title)}</h3>
                             {r.description && (
-                              <p className="text-sm text-muted-foreground line-clamp-2">{r.description}</p>
+                              <p className="text-sm text-muted-foreground line-clamp-2">{tr(r.description)}</p>
                             )}
                           </div>
                         </div>
