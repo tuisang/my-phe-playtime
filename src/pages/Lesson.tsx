@@ -33,6 +33,7 @@ const Lesson = () => {
   const [lesson, setLesson] = useState<LessonData | null>(null);
   const [isPurchased, setIsPurchased] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const { tr } = useI18n();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -139,15 +140,15 @@ const Lesson = () => {
             <Badge className="mb-4 text-lg px-4 py-2">{getGradeLabel(lesson.grade)}</Badge>
             <div className="flex items-center gap-2">
               <SpeakButton
-                text={`${useI18n().tr(lesson.title)}. ${useI18n().tr(lesson.description ?? "")}`}
+                text={`${tr(lesson.title)}. ${tr(lesson.description ?? "")}`}
                 label="Read aloud"
                 size="lg"
               />
               <BookmarkButton lessonId={lesson.id} />
             </div>
           </div>
-          <h1 className="text-5xl font-bold mb-4 text-foreground">{useI18n().tr(lesson.title)}</h1>
-          <p className="text-xl text-muted-foreground">{useI18n().tr(lesson.description ?? "")}</p>
+          <h1 className="text-5xl font-bold mb-4 text-foreground">{tr(lesson.title)}</h1>
+          <p className="text-xl text-muted-foreground">{tr(lesson.description ?? "")}</p>
         </div>
 
         {lesson.video_url && (
