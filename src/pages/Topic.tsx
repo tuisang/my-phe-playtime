@@ -14,6 +14,7 @@ import { awardPoints, POINTS } from "@/lib/gamification";
 import { BookmarkButton } from "@/components/BookmarkButton";
 import { Quiz } from "@/components/Quiz";
 import { useToast } from "@/hooks/use-toast";
+import { useI18n } from "@/lib/i18n";
 
 interface Topic {
   id: string;
