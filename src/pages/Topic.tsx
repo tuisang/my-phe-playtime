@@ -57,6 +57,7 @@ const Topic = () => {
   const [completed, setCompleted] = useState(false);
   const [savingProgress, setSavingProgress] = useState(false);
   const { toast } = useToast();
+  const { tr, t } = useI18n();
 
   useEffect(() => {
     const fetchData = async () => {
