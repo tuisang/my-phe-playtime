@@ -10,6 +10,8 @@ import { getGradeLabel } from "@/lib/grades";
 import { useToast } from "@/hooks/use-toast";
 import { openSecureDownload } from "@/lib/secureDownload";
 import { BookmarkButton } from "@/components/BookmarkButton";
+import { SpeakButton } from "@/components/SpeakButton";
+import { useI18n } from "@/lib/i18n";
 
 interface LessonData {
   id: string;
