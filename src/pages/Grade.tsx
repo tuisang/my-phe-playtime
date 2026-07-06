@@ -10,6 +10,7 @@ import { Progress } from "@/components/ui/progress";
 import { Link } from "react-router-dom";
 import { getCategoryForGrade, getGradeLabel } from "@/lib/grades";
 import { getCompletedTopicIds } from "@/lib/progress";
+import { useI18n } from "@/lib/i18n";
 
 interface Topic {
   id: string;
