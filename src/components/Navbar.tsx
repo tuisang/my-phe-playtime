@@ -5,6 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { SearchBar } from "@/components/SearchBar";
 import { LanguageToggle } from "@/components/LanguageToggle";
+import { AccessibilityMenu } from "@/components/AccessibilityMenu";
 import { useI18n } from "@/lib/i18n";
 
 interface NavbarProps {
@@ -52,6 +53,7 @@ export const Navbar = ({ user, userRole }: NavbarProps) => {
 
           <div className="flex items-center gap-2 md:gap-4 flex-wrap justify-end">
             <LanguageToggle />
+            <AccessibilityMenu />
             {user ? (
               <>
                 <Link to="/history">
