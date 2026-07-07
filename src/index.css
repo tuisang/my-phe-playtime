@@ -96,3 +96,70 @@ All colors MUST be HSL.
     @apply bg-background text-foreground;
   }
 }
+
+/* ================= Accessibility modes ================= */
+
+/* Larger text — scales root font size, cascades to rem-based Tailwind sizes */
+html.a11y-large {
+  font-size: 120%;
+}
+html.a11y-large body {
+  line-height: 1.65;
+  letter-spacing: 0.01em;
+}
+html.a11y-large p,
+html.a11y-large li,
+html.a11y-large label,
+html.a11y-large button,
+html.a11y-large a {
+  line-height: 1.7;
+}
+
+/* Dyslexia-friendly font — OpenDyslexic loaded from CDN in index.html
+   Falls back to system-friendly sans if the font fails to load. */
+html.a11y-dyslexic,
+html.a11y-dyslexic body,
+html.a11y-dyslexic button,
+html.a11y-dyslexic input,
+html.a11y-dyslexic textarea,
+html.a11y-dyslexic select {
+  font-family: "OpenDyslexic", "Comic Sans MS", "Comic Sans", "Verdana", system-ui, sans-serif !important;
+}
+html.a11y-dyslexic p,
+html.a11y-dyslexic li,
+html.a11y-dyslexic h1,
+html.a11y-dyslexic h2,
+html.a11y-dyslexic h3,
+html.a11y-dyslexic h4,
+html.a11y-dyslexic h5,
+html.a11y-dyslexic h6 {
+  letter-spacing: 0.04em;
+  word-spacing: 0.12em;
+  line-height: 1.7;
+}
+
+/* High contrast — deepen foreground/background and strengthen borders */
+html.a11y-contrast {
+  --background: 0 0% 100%;
+  --foreground: 0 0% 0%;
+  --card: 0 0% 100%;
+  --card-foreground: 0 0% 0%;
+  --muted: 0 0% 92%;
+  --muted-foreground: 0 0% 10%;
+  --border: 0 0% 0%;
+  --input: 0 0% 100%;
+  --ring: 25 100% 40%;
+}
+html.a11y-contrast.dark {
+  --background: 0 0% 0%;
+  --foreground: 0 0% 100%;
+  --card: 0 0% 5%;
+  --card-foreground: 0 0% 100%;
+  --muted: 0 0% 15%;
+  --muted-foreground: 0 0% 95%;
+  --border: 0 0% 100%;
+}
+html.a11y-contrast * {
+  border-color: hsl(var(--border)) !important;
+}
+

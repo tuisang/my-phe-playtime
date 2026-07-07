@@ -13,11 +13,13 @@ import Search from "./pages/Search";
 import History from "./pages/History";
 import NotFound from "./pages/NotFound";
 import { I18nProvider } from "@/lib/i18n";
+import { A11yProvider } from "@/lib/a11y";
 
 const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
+    <A11yProvider>
     <I18nProvider>
       <TooltipProvider>
         <Toaster />
