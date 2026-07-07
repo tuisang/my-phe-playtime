@@ -6,13 +6,10 @@ export type Term = 1 | 2 | 3;
 
 export interface LessonPlanOptions {
   grade: number;
-  term: Terom | Term;
+  term: Term;
   schoolName?: string;
   teacherName?: string;
 }
-
-// (Typo guard: keep Term type only)
-export type Terom = Term;
 
 interface TopicRow {
   id: string;
