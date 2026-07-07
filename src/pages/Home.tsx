@@ -7,7 +7,9 @@ import { Card } from "@/components/ui/card";
 import { GRADE_CATEGORIES } from "@/lib/grades";
 import { getGradeProgress } from "@/lib/progress";
 import { getUserStats, type UserStats } from "@/lib/gamification";
-import { Baby, School, Users, Sparkles, Flame, Trophy } from "lucide-react";
+import { Baby, School, Users, Sparkles, Flame, Trophy, FileText } from "lucide-react";
+import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 
 const ROLE_INFO: Record<string, { title: string; blurb: string; icon: typeof Baby; accent: string }> = {
   pupil: { title: "Hi, superstar learner!", blurb: "Pick a class and start playing, watching, and learning.", icon: Baby, accent: "from-orange-400 to-rose-400" },
@@ -133,6 +135,27 @@ const Home = () => {
                   <span className="mr-1">{b.emoji}</span>{b.label}
                 </div>
               ))}
+            </div>
+          </Card>
+        )}
+
+        {user && (userRole === "teacher" || userRole === "parent" || userRole === "admin") && (
+          <Card className="mb-8 p-5 md:p-6 border-4 border-secondary/20 bg-gradient-to-br from-cyan-50 via-teal-50 to-emerald-50 dark:from-cyan-950/20 dark:via-teal-950/20 dark:to-emerald-950/20">
+            <div className="flex flex-col md:flex-row items-start md:items-center gap-4">
+              <div className="p-3 rounded-2xl bg-gradient-to-br from-secondary to-accent text-white">
+                <FileText className="w-8 h-8" />
+              </div>
+              <div className="flex-1">
+                <h3 className="text-xl md:text-2xl font-bold">Termly Lesson Plans</h3>
+                <p className="text-muted-foreground">
+                  Auto-generate a 13-week scheme of work as a downloadable PDF for any grade and term.
+                </p>
+              </div>
+              <Link to="/lesson-plans">
+                <Button size="lg" className="font-bold">
+                  Generate plan
+                </Button>
+              </Link>
             </div>
           </Card>
         )}
