@@ -139,6 +139,25 @@ const Home = () => {
           </Card>
         )}
 
+        {user && (userRole === "teacher" || userRole === "pupil" || userRole === "admin") && (
+          <Card className="mb-4 p-5 md:p-6 border-4 border-primary/20 bg-gradient-to-br from-purple-50 via-pink-50 to-rose-50 dark:from-purple-950/20 dark:via-pink-950/20 dark:to-rose-950/20">
+            <div className="flex flex-col md:flex-row items-start md:items-center gap-4">
+              <div className="p-3 rounded-2xl bg-gradient-to-br from-primary to-secondary text-white">
+                <Users className="w-8 h-8" />
+              </div>
+              <div className="flex-1">
+                <h3 className="text-xl md:text-2xl font-bold">My Classes</h3>
+                <p className="text-muted-foreground">
+                  {userRole === "teacher" ? "Create classes, share join codes, and track pupil progress." : userRole === "pupil" ? "Join your teacher's class with a 6-letter code." : "Manage or join classes."}
+                </p>
+              </div>
+              <Link to="/classes">
+                <Button size="lg" className="font-bold">Open classes</Button>
+              </Link>
+            </div>
+          </Card>
+        )}
+
         {user && (userRole === "teacher" || userRole === "parent" || userRole === "admin") && (
           <Card className="mb-8 p-5 md:p-6 border-4 border-secondary/20 bg-gradient-to-br from-cyan-50 via-teal-50 to-emerald-50 dark:from-cyan-950/20 dark:via-teal-950/20 dark:to-emerald-950/20">
             <div className="flex flex-col md:flex-row items-start md:items-center gap-4">

@@ -12,6 +12,7 @@ import Admin from "./pages/Admin";
 import Search from "./pages/Search";
 import History from "./pages/History";
 import LessonPlans from "./pages/LessonPlans";
+import Classes from "./pages/Classes";
 import NotFound from "./pages/NotFound";
 import { I18nProvider } from "@/lib/i18n";
 import { A11yProvider } from "@/lib/a11y";
@@ -36,6 +37,7 @@ const App = () => (
             <Route path="/search" element={<Search />} />
             <Route path="/history" element={<History />} />
             <Route path="/lesson-plans" element={<LessonPlans />} />
+            <Route path="/classes" element={<Classes />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
