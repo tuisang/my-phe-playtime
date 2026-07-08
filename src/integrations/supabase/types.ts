@@ -53,6 +53,65 @@ export type Database = {
           },
         ]
       }
+      class_members: {
+        Row: {
+          class_id: string
+          id: string
+          joined_at: string
+          pupil_id: string
+        }
+        Insert: {
+          class_id: string
+          id?: string
+          joined_at?: string
+          pupil_id: string
+        }
+        Update: {
+          class_id?: string
+          id?: string
+          joined_at?: string
+          pupil_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "class_members_class_id_fkey"
+            columns: ["class_id"]
+            isOneToOne: false
+            referencedRelation: "classes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      classes: {
+        Row: {
+          created_at: string
+          grade: number | null
+          id: string
+          join_code: string
+          name: string
+          teacher_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          grade?: number | null
+          id?: string
+          join_code: string
+          name: string
+          teacher_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          grade?: number | null
+          id?: string
+          join_code?: string
+          name?: string
+          teacher_id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       lessons: {
         Row: {
           created_at: string
@@ -456,6 +515,14 @@ export type Database = {
           _role: Database["public"]["Enums"]["app_role"]
           _user_id: string
         }
+        Returns: boolean
+      }
+      is_class_member: {
+        Args: { _class_id: string; _user_id: string }
+        Returns: boolean
+      }
+      is_class_teacher: {
+        Args: { _class_id: string; _user_id: string }
         Returns: boolean
       }
     }
