@@ -32,6 +32,11 @@ interface Resource {
   url: string;
   sort_order: number;
 }
+// External links (YouTube, Vimeo, etc.) aren't stored in our own Supabase buckets,
+// so they can't be signed by the secure-download edge function — open them directly instead.
+function isExternalMediaUrl(url: string): boolean {
+  return /youtube\.com|youtu\.be|vimeo\.com/i.test(url) || !/\/storage\/v1\/object\//.test(url);
+}
 
 const SECTIONS: {
   type: Resource["type"];
@@ -233,7 +238,11 @@ const Topic = () => {
                         <Button
                           className="mt-4 w-full font-bold"
                           size="lg"
-                          onClick={() => openSecureDownload({ resourceId: r.id })}
+                          onClick={() =>
+  isExternalMediaUrl(r.url)
+    ? window.open(r.url, "_blank", "noopener,noreferrer")
+    : openSecureDownload({ resourceId: r.id })
+}
                         >
                           <CtaIcon className="w-4 h-4 mr-2" />
                           {section.cta}
